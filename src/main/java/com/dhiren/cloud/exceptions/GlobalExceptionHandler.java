@@ -1,7 +1,7 @@
 package com.dhiren.cloud.exceptions;
 
 import com.dhiren.cloud.exceptions.custom.ValidationBusinessException;
-import com.dhiren.cloud.exceptions.model.CustomResponse;
+import com.dhiren.cloud.model.CustomResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
