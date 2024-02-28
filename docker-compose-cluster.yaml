@@ -68,3 +68,32 @@ services:
       KAFKA_LOG4J_LOGGERS: "kafka.controller=INFO,kafka.producer.async.DefaultEventHandler=INFO,state.change.logger=INFO"
     depends_on:
       - zoo1
+
+  database:
+    image: 'postgres:latest'
+    ports:
+      - "5432:5432"
+    env_file:
+      - .env
+    networks:
+      - postgres-network
+    volumes:
+      - ./db-data/:/var/lib/postgresql/data/
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
+#  pgadmin:
+#    image: dpage/pgadmin4
+#    ports:
+#      - 15433:80
+#    env_file:
+#      - .env
+#    depends_on:
+#      - database
+#    networks:
+#      - postgres-network
+#    volumes:
+#      - ./pgadmin-data/:/var/lib/pgadmin/
+
+networks:
+  postgres-network:
+    driver: bridge

@@ -1,5 +1,7 @@
 package com.dhiren.cloud.contoller;
 
+import com.dhiren.cloud.enums.LibraryEventType;
+import com.dhiren.cloud.exceptions.custom.ValidationBusinessException;
 import com.dhiren.cloud.model.LibraryEvent;
 import com.dhiren.cloud.producer.LibraryEventProducer;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -36,6 +38,9 @@ public class LibraryEventsController {
     public ResponseEntity<LibraryEvent> putLibraryEvent(
             final @RequestBody @Valid LibraryEvent libraryEvent) throws JsonProcessingException {
         log.info("Update library event : {} ", libraryEvent);
+        if (!libraryEvent.libraryEventType().equals(LibraryEventType.UPDATE)) {
+            throw new ValidationBusinessException("LibraryEventType Not Supported");
+        }
         libraryEventProducer.produceLibraryEvent(libraryEvent);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(libraryEvent);

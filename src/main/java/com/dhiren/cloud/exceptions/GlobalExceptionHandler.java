@@ -1,6 +1,7 @@
 package com.dhiren.cloud.exceptions;
 
-import com.dhiren.cloud.exceptions.model.CustomResponse;
+import com.dhiren.cloud.exceptions.custom.ValidationBusinessException;
+import com.dhiren.cloud.model.CustomResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +20,7 @@ public class GlobalExceptionHandler {
 
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Object> handleValidationExceptions(MethodArgumentNotValidException ex) {
+    public ResponseEntity<CustomResponse> handleValidationExceptions(MethodArgumentNotValidException ex) {
         Map<String, String> errors = new HashMap<>();
         ex.getBindingResult().getAllErrors().forEach(error -> {
             String fieldName = ((FieldError) error).getField();
@@ -28,6 +29,14 @@ public class GlobalExceptionHandler {
         });
 
         CustomResponse response = new CustomResponse(errors, Instant.now());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(ValidationBusinessException.class)
+    public ResponseEntity<CustomResponse> handleValidationExceptions(ValidationBusinessException ex) {
+        Map<String, String> errorMap = new HashMap<>();
+        errorMap.put("errors",ex.getMessage());
+        CustomResponse response = new CustomResponse(errorMap, Instant.now());
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 

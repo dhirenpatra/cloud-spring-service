@@ -1,4 +1,4 @@
-package com.dhiren.cloud.exceptions.model;
+package com.dhiren.cloud.model;
 
 import java.time.Instant;
 import java.util.Map;
