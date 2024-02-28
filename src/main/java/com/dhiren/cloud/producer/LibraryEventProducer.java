@@ -9,6 +9,8 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Component;
 
+import java.util.concurrent.CompletableFuture;
+
 @Component
 @Slf4j
 public class LibraryEventProducer {
@@ -24,11 +26,11 @@ public class LibraryEventProducer {
         this.objectMapper = objectMapper;
     }
 
-    public void produceLibraryEvent(LibraryEvent libraryEvent) throws JsonProcessingException {
+    public CompletableFuture<SendResult<Integer, String>> produceLibraryEvent(LibraryEvent libraryEvent) throws JsonProcessingException {
         var key = libraryEvent.libraryEventId();
         var value = objectMapper.writeValueAsString(libraryEvent);
 
-        kafkaTemplate.send(topic, key, value)
+        return kafkaTemplate.send(topic, key, value)
                 .whenComplete((sendResult, throwable) -> {
                     if(throwable != null) {
                         handleFailure(key, value, throwable);
