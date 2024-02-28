@@ -12,6 +12,9 @@ public class KafkaConfig {
     @Value("${library.topic.name}")
     private String topic;
 
+    @Value("${library.topic.test.name}")
+    private String testTopic;
+
     @Value("${library.topic.partitions}")
     private int partitions;
 
@@ -21,6 +24,11 @@ public class KafkaConfig {
     @Bean
     public NewTopic createNewTopic() {
         return TopicBuilder.name(topic).partitions(partitions).replicas(replicas).build();
+    }
+
+    @Bean
+    public NewTopic createNewTestTopic() {
+        return TopicBuilder.name(testTopic).partitions(partitions).replicas(replicas).build();
     }
 
 }
