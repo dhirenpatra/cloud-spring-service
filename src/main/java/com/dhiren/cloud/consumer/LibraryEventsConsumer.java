@@ -1,5 +1,7 @@
 package com.dhiren.cloud.consumer;
 
+import com.dhiren.cloud.service.PersistEventService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,13 +14,17 @@ import static com.dhiren.cloud.constants.AppConstants.TOPIC;
 @Slf4j
 public class LibraryEventsConsumer {
 
-    @Value("${library.topic.name}")
-    private String topic;
+    private final PersistEventService eventService;
+
+    public LibraryEventsConsumer(PersistEventService eventService) {
+        this.eventService = eventService;
+    }
 
     @KafkaListener(topics = {TOPIC})
-    public void onMessage(ConsumerRecord<Integer, String> consumerRecord) {
+    public void onMessage(ConsumerRecord<Integer, String> consumerRecord) throws JsonProcessingException {
         log.info("Message Received Successfully with key {} value {} in partition {}",
                 consumerRecord.key(), consumerRecord.value(), consumerRecord.partition());
+        eventService.processLibraryEventConsumerRecord(consumerRecord);
     }
 
 }
