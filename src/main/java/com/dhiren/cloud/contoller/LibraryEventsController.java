@@ -32,8 +32,16 @@ public class LibraryEventsController {
     public ResponseEntity<LibraryEvent> postLibraryEvent(
             final @RequestBody LibraryEvent libraryEvent) throws JsonProcessingException {
         log.info("library event : {} ", libraryEvent);
-        CompletableFuture<SendResult<Integer, String>> sendResultCompletableFuture =
-                libraryEventProducer.produceLibraryEvent(libraryEvent);
+        libraryEventProducer.produceLibraryEvent(libraryEvent);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(libraryEvent);
+    }
+
+    @PostMapping("/app2")
+    public ResponseEntity<LibraryEvent> postLibraryEventRecord(
+            final @RequestBody LibraryEvent libraryEvent) throws JsonProcessingException {
+        log.info("library event : {} ", libraryEvent);
+        libraryEventProducer.produceLibraryEventAsRecord(libraryEvent);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(libraryEvent);
     }
