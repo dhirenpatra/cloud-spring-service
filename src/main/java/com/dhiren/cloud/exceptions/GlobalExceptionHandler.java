@@ -1,5 +1,6 @@
 package com.dhiren.cloud.exceptions;
 
+import com.dhiren.cloud.exceptions.custom.LibraryEventNotFoundException;
 import com.dhiren.cloud.exceptions.custom.ValidationBusinessException;
 import com.dhiren.cloud.model.CustomResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -34,6 +35,14 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ValidationBusinessException.class)
     public ResponseEntity<CustomResponse> handleValidationExceptions(ValidationBusinessException ex) {
+        Map<String, String> errorMap = new HashMap<>();
+        errorMap.put("errors",ex.getMessage());
+        CustomResponse response = new CustomResponse(errorMap, Instant.now());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(LibraryEventNotFoundException.class)
+    public ResponseEntity<CustomResponse> handleLibraryEventNotFoundException(LibraryEventNotFoundException ex) {
         Map<String, String> errorMap = new HashMap<>();
         errorMap.put("errors",ex.getMessage());
         CustomResponse response = new CustomResponse(errorMap, Instant.now());
