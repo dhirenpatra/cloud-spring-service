@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.config.TopicBuilder;
 
 @Configuration
-public class KafkaConfig {
+public class TopicCreationKafkaConfig {
 
     @Value("${library.topic.name}")
     private String topic;
