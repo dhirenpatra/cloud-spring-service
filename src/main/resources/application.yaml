@@ -41,6 +41,9 @@ spring:
 
 
 library:
+  retry:
+    topic: library-event-retry
+    dlq: library-event-dlq
   topic:
     test:
       name: library-event-test
