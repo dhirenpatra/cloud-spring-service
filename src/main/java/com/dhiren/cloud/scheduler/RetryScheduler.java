@@ -1,5 +1,6 @@
 package com.dhiren.cloud.scheduler;
 
+import com.dhiren.cloud.annotations.LogTimer;
 import com.dhiren.cloud.entity.FailedRecord;
 import com.dhiren.cloud.entity.LibraryEvent;
 import com.dhiren.cloud.enums.RecordStatus;
@@ -35,6 +36,7 @@ public class RetryScheduler {
             );
 
     @Scheduled(fixedRate = 10000)
+    @LogTimer
     public void pullRecord() throws JsonProcessingException {
         repository.findAllByStatus(RecordStatus.RETRYABLE)
             .stream()
