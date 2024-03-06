@@ -1,7 +1,7 @@
 package com.dhiren.cloud.scheduler;
 
+import com.dhiren.cloud.annotations.LogTimer;
 import com.dhiren.cloud.entity.FailedRecord;
-import com.dhiren.cloud.entity.LibraryEvent;
 import com.dhiren.cloud.enums.RecordStatus;
 import com.dhiren.cloud.repo.FailedRecordRepository;
 import com.dhiren.cloud.service.PersistEventService;
@@ -17,8 +17,8 @@ import java.util.function.Function;
 @Slf4j
 public class RetryScheduler {
 
-    private FailedRecordRepository repository;
-    private PersistEventService eventService;
+    private final FailedRecordRepository repository;
+    private final PersistEventService eventService;
 
     public RetryScheduler(FailedRecordRepository repository, PersistEventService eventService) {
         this.repository = repository;
@@ -35,7 +35,8 @@ public class RetryScheduler {
             );
 
     @Scheduled(fixedRate = 10000)
-    public void pullRecord() throws JsonProcessingException {
+    @LogTimer
+    public void pullRecord() {
         repository.findAllByStatus(RecordStatus.RETRYABLE)
             .stream()
             .map(mapper)
