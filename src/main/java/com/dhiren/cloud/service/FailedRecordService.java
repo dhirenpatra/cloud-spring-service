@@ -8,7 +8,6 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.stereotype.Service;
 
 import java.util.function.BiFunction;
-import java.util.function.Function;
 
 @Service
 @Slf4j
@@ -28,7 +27,7 @@ public class FailedRecordService {
                             .key(consumerRecord.key())
                             .partition(consumerRecord.partition())
                             .offset_value(consumerRecord.offset())
-                            .exception(exception.getMessage())
+                            .exception(exception.getCause().getMessage())
                             .build();
 
     public void save(ConsumerRecord<Integer, String> consumerRecord , Throwable t, RecordStatus status) {
